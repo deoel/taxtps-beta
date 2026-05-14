@@ -25,8 +25,13 @@ class DeclarationSeeder extends Seeder
                 $cif = $faker->randomFloat(2, 2000, 500000);
                 $isExempt = $faker->boolean(15);
                 $sh = $isExempt ? $faker->randomElement($exemptCodes) : $faker->numerify('####.##.##');
-                
+
                 $isFraud = $faker->boolean(5);
+
+                $priority = 0;
+                if ($cif > 100000) $priority += 3;
+                if ($isFraud) $priority += 3;
+                
                 $batch[] = [
                     'numero_dcl' => 'DCL-' . $faker->unique()->numberBetween(100000, 999999),
                     'customs_office_id' => $office->id,
@@ -34,6 +39,7 @@ class DeclarationSeeder extends Seeder
                     'code_sh' => $sh,
                     'montant_cif' => $cif,
                     'taxe_due' => $isExempt ? 0 : ($cif * 0.02),
+                    'priority_score' => $priority,
                     'statut' => $isFraud ? 'alerte' : 'conforme',
                     'gps_validated' => !$isFraud,
                     'latitude' => $isFraud ? $office->latitude + 1.5 : $office->latitude,

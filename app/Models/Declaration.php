@@ -14,6 +14,7 @@ class Declaration extends Model
         'code_sh',
         'montant_cif',
         'taxe_due',
+        'priority_score',
         'statut',
         'gps_validated',
         'latitude',
