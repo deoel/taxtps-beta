@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class CustomsOffice extends Model
 {
     protected $fillable = [
-        'province_id', 
-        'code_bureau', 
-        'name', 
-        'latitude', 
-        'longitude', 
+        'province_id',
+        'code_bureau',
+        'name',
+        'latitude',
+        'longitude',
         'gps_required'
     ];
 
@@ -29,5 +29,10 @@ class CustomsOffice extends Model
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
+    }
+
+    public function declarations(): HasMany
+    {
+        return $this->hasMany(Declaration::class);
     }
 }
