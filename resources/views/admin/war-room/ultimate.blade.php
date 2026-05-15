@@ -4,7 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>TAXTPS | Data System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="{{ asset('favicon-96x96.png') }}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}" />
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}" />
+    <meta name="apple-mobile-web-app-title" content="TAXTPS" />
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -106,8 +112,15 @@
     <div class="flex h-[calc(100vh-64px)] overflow-hidden">
         <aside class="w-80 cyber-panel border-r border-white/5 p-6 overflow-y-auto custom-scrollbar"
             x-show="filtersOpen">
-            <h2 class="text-blue-400 font-black uppercase tracking-tighter mb-6 flex items-center gap-2">
-                <span class="w-2 h-2 bg-blue-500 rounded-full animate-ping"></span> Paramètres de l'Unité
+            <h2 class="flex items-center gap-3 mb-8">
+                <span class="flex items-center justify-center w-8 h-8 rounded border border-blue-500/30 bg-blue-500/5">
+                    <span class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
+                </span>
+                <div class="flex flex-col">
+                    <span class="text-blue-400 font-black uppercase text-sm tracking-widest">Configuration</span>
+                    <span
+                        class="text-[9px] text-blue-500/60 font-mono uppercase tracking-[0.2em] -mt-1">Opérationnelle</span>
+                </div>
             </h2>
 
             <form action="{{ route('war-room.ultimate') }}" method="GET" class="space-y-6">
@@ -142,7 +155,8 @@
                         class="w-full bg-slate-900 border border-white/10 rounded-lg p-2 text-sm focus:border-blue-500 outline-none">
                         <option value="">Tous les Bureaux</option>
                         @foreach ($allOffices as $o)
-                            <option value="{{ $o->id }}" {{ request('office_id') == $o->id ? 'selected' : '' }}>
+                            <option value="{{ $o->id }}"
+                                {{ request('office_id') == $o->id ? 'selected' : '' }}>
                                 {{ $o->name }} ({{ $o->code_bureau }})</option>
                         @endforeach
                     </select>
