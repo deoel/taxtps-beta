@@ -77,19 +77,20 @@
             </div>
         </div>
         <div class="flex items-center gap-6">
-            <div class="flex items-center gap-4 bg-white/5 px-3 py-1.5 rounded-full border border-white/5">
-                <div class="text-left">
-                    <span class="text-[9px] font-mono text-gray-500 uppercase tracking-widest block">Synchro</span>
-                    <span class="text-[8px] font-mono text-gray-600">{{ $lastSyncTime->format('H:i:s') }}</span>
-                </div>
+            <div
+                class="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-lg border border-blue-500/20 hover:border-blue-500/40 transition-all">
                 <button @click="refreshing = true; setTimeout(() => { window.location.reload() }, 1000)"
                     class="text-blue-400 hover:text-blue-300 transition-all" :class="refreshing ? 'refresh-spin' : ''">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
                         </path>
                     </svg>
                 </button>
+                <div class="text-left border-l border-white/10 pl-3">
+                    <p class="text-[9px] font-mono text-gray-400 uppercase tracking-widest">Dernière synchro</p>
+                    <p class="text-xs font-mono font-bold text-blue-400">{{ $lastSyncTime->format('H:i:s') }}</p>
+                </div>
             </div>
             <div class="text-right">
                 <p class="text-[10px] text-gray-500 font-bold uppercase">Statut Serveur Sydonia</p>
@@ -114,9 +115,15 @@
             <form action="{{ route('war-room.ultimate') }}" method="GET" class="space-y-6">
                 <div>
                     <label class="block text-[10px] text-gray-500 font-bold uppercase mb-2">Plage de Dates</label>
-                    <input type="text" name="date_range" placeholder="AAAA-MM-JJ - AAAA-MM-JJ"
-                        value="{{ request('date_range') }}"
-                        class="w-full bg-slate-900 border border-white/10 rounded-lg p-2 text-sm focus:border-blue-500 outline-none">
+                    <div class="flex gap-1 items-center"> <input type="date" name="date_from"
+                            value="{{ request('date_from') }}"
+                            class="min-w-0 flex-1 bg-slate-900 border border-white/10 rounded-lg px-1.5 py-2 text-[11px] focus:border-blue-500 outline-none text-gray-300">
+
+                        <span class="text-gray-600 text-[10px]">à</span>
+
+                        <input type="date" name="date_to" value="{{ request('date_to') }}"
+                            class="min-w-0 flex-1 bg-slate-900 border border-white/10 rounded-lg px-1.5 py-2 text-[11px] focus:border-blue-500 outline-none text-gray-300">
+                    </div>
                 </div>
 
                 <div>

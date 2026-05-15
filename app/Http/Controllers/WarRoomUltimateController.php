@@ -14,9 +14,12 @@ class WarRoomUltimateController extends Controller
         // --- 1. SYSTÈME DE FILTRES DYNAMIQUES (Hérité de Intelligence) ---
         $query = Declaration::query();
 
-        if ($request->filled('date_range')) {
-            $range = explode(' - ', $request->date_range);
-            $query->whereBetween('created_at', [Carbon::parse($range[0]), Carbon::parse($range[1] ?? now())]);
+        if ($request->filled('date_from') && $request->filled('date_to')) {
+            $query->whereBetween('created_at', [Carbon::parse($request->date_from), Carbon::parse($request->date_to)->addDay()]);
+        } elseif ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', Carbon::parse($request->date_from));
+        } elseif ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', Carbon::parse($request->date_to));
         }
 
         if ($request->filled('province_id')) {
