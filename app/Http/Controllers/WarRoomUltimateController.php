@@ -20,7 +20,7 @@ class WarRoomUltimateController extends Controller
         }
 
         if ($request->filled('province_id')) {
-            $query->whereHas('office', function($q) use ($request) {
+            $query->whereHas('office', function ($q) use ($request) {
                 $q->where('province_id', $request->province_id);
             });
         }
@@ -46,9 +46,9 @@ class WarRoomUltimateController extends Controller
         $stats['performance'] = $stats['total_sydonia'] > 0 ? ($stats['total_valide'] / $stats['total_sydonia']) * 100 : 0;
 
         // --- 3. ANALYSE GÉOGRAPHIQUE (Hérité de Advanced) ---
-        $offices = CustomsOffice::withCount(['declarations as alertes' => function($q) {
+        $offices = CustomsOffice::withCount(['declarations as alertes' => function ($q) {
             $q->whereIn('statut', ['alerte', 'suspect']);
-        }])->get()->map(function($office) {
+        }])->get()->map(function ($office) {
             return [
                 'id' => $office->id,
                 'name' => $office->name,
@@ -68,8 +68,8 @@ class WarRoomUltimateController extends Controller
             ->take(5)->get();
 
         $agentPerformance = User::role('agent')
-            ->withCount(['declarations as dossiers_traites' => function($q) use ($request) {
-                if($request->filled('office_id')) $q->where('customs_office_id', $request->office_id);
+            ->withCount(['declarations as dossiers_traites' => function ($q) use ($request) {
+                if ($request->filled('office_id')) $q->where('customs_office_id', $request->office_id);
             }])
             ->orderByDesc('dossiers_traites')
             ->take(5)->get();
@@ -86,9 +86,24 @@ class WarRoomUltimateController extends Controller
             ->latest('updated_at')
             ->take(15)->get();
 
+        // --- 6. PERFORMANCE PAR PROVINCE (Pour l'onglet Analyse Provinciale) ---
+        $provincePerformance = Province::with(['offices.declarations'])
+            ->get()
+            ->map(fn($province) => [
+                'name' => $province->name,
+                'total' => $province->offices->flatMap->declarations->sum('taxe_due'),
+                'count' => $province->offices->flatMap->declarations->count(),
+                'valide' => $province->offices->flatMap->declarations->where('statut', 'valide')->count(),
+            ]);
+
         return view('admin.war-room.ultimate', compact(
-            'stats', 'offices', 'topImportateurs', 'agentPerformance', 
-            'highRiskFiles', 'latestAudits'
+            'stats',
+            'offices',
+            'topImportateurs',
+            'agentPerformance',
+            'highRiskFiles',
+            'latestAudits',
+            'provincePerformance'
         ))->with([
             'provinces' => Province::all(),
             'allOffices' => CustomsOffice::all()
