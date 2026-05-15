@@ -234,12 +234,12 @@
                 <div class="cyber-panel p-4 rounded-2xl border-l-4 border-blue-500">
                     <p class="text-[10px] text-gray-400 font-bold uppercase">Potentiel SYDONIA</p>
                     <h3 class="stat-value text-2xl text-blue-400 font-black">
-                        {{ number_format($stats['total_sydonia'], 2) }} $</h3>
+                        {{ number_format($stats['total_sydonia'], 2) }} FC</h3>
                 </div>
                 <div class="cyber-panel p-4 rounded-2xl border-l-4 border-emerald-500">
                     <p class="text-[10px] text-gray-400 font-bold uppercase">Recouvrement Réel</p>
                     <h3 class="stat-value text-2xl text-emerald-400 font-black">
-                        {{ number_format($stats['total_valide'], 2) }} $</h3>
+                        {{ number_format($stats['total_valide'], 2) }} FC</h3>
                 </div>
                 <div class="cyber-panel p-4 rounded-2xl border-l-4 border-red-500">
                     <p class="text-[10px] text-gray-400 font-bold uppercase">Alertes Fraude</p>
@@ -283,7 +283,7 @@
                                             class="text-gray-400 uppercase font-bold">{{ $prov['name'] ?? 'Province' }}</span>
                                         <span
                                             class="text-blue-400 font-mono">{{ number_format($prov['total'] ?? 0, 0) }}
-                                            $</span>
+                                            FC</span>
                                     </div>
                                     <div class="h-2 w-full bg-white/5 rounded-full">
                                         <div class="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full group-hover:brightness-125 transition-all"
@@ -305,7 +305,7 @@
                                     <span
                                         class="text-[11px] font-bold truncate w-32 uppercase">{{ $imp->importateur }}</span>
                                     <span
-                                        class="text-[10px] font-mono text-emerald-400">{{ number_format($imp->total_du, 0) }}$</span>
+                                        class="text-[10px] font-mono text-emerald-400">{{ number_format($imp->total_du, 0) }}FC</span>
                                 </div>
                                 <div class="w-full bg-white/5 h-1.5 rounded-full mt-2">
                                     <div class="bg-blue-500 h-full rounded-full" style="width: 70%"></div>
