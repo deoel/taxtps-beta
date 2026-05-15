@@ -15,7 +15,7 @@ class DeclarationSeeder extends Seeder
     {
         $faker = Faker::create('fr_FR');
         $offices = CustomsOffice::all();
-        $agent = User::role('Customs Agent')->first();
+        $agent = User::role('agent')->first();
         $exemptCodes = Exemption::query()->pluck('code_sh')->toArray();
 
         for ($j = 0; $j < 4; $j++) {

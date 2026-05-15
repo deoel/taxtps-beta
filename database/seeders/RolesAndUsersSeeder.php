@@ -10,9 +10,9 @@ class RolesAndUsersSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = Role::create(['name' => 'War Room Admin']);
-        $manager = Role::create(['name' => 'Province Manager']);
-        $agentRole = Role::create(['name' => 'Customs Agent']);
+        $admin = Role::create(['name' => 'admin']);
+        $manager = Role::create(['name' => 'manager']);
+        $agentRole = Role::create(['name' => 'agent']);
 
         User::create([
             'name' => 'Superviseur National',
