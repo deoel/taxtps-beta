@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>TAXTPS | Ultimate War Room v6.0</title>
+    <title>TAXTPS | Data System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -63,15 +63,13 @@
     <nav
         class="h-16 border-b border-white/5 flex items-center justify-between px-6 bg-slate-950/50 backdrop-blur-md relative z-50">
         <div class="flex items-center gap-4">
-            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
+            <div
+                class="w-12 h-12 bg-white rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/10 overflow-hidden border border-white/10">
+                <img src="{{ asset('images/fps-logo.jpg') }}" alt="Logo FPS" class="w-full h-full object-contain p-1">
             </div>
             <div>
                 <h1 class="text-xl font-black tracking-tighter glitch-text text-blue-400">TAXTPS <span
-                        class="text-white">COMMAND HUB</span></h1>
+                        class="text-white">DATA SYSTEM</span></h1>
                 <p class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Souveraineté Financière & Santé
                     Publique</p>
             </div>
