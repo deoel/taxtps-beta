@@ -74,8 +74,9 @@
                 <img src="{{ asset('images/fps-logo.jpg') }}" alt="Logo FPS" class="w-full h-full object-contain p-1">
             </div>
             <div>
-                <h1 class="text-xl font-black tracking-tighter glitch-text text-blue-400">TAXTPS <span
-                        class="text-white">DATA SYSTEM</span></h1>
+                <h1 class="text-xl font-black tracking-tighter glitch-text text-blue-400">
+                    <a href="{{ route('war-room.ultimate') }}">TAXTPS <span class="text-white">DATA SYSTEM</span></a>
+                </h1>
                 <p class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Souveraineté Financière & Santé
                     Publique</p>
             </div>
@@ -233,12 +234,12 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div class="cyber-panel p-4 rounded-2xl border-l-4 border-blue-500">
                     <p class="text-[10px] text-gray-400 font-bold uppercase">Potentiel SYDONIA</p>
-                    <h3 class="stat-value text-2xl text-blue-400 font-black">
+                    <h3 class="stat-value text-xl text-blue-400 font-black">
                         {{ number_format($stats['total_sydonia'], 2) }} FC</h3>
                 </div>
                 <div class="cyber-panel p-4 rounded-2xl border-l-4 border-emerald-500">
                     <p class="text-[10px] text-gray-400 font-bold uppercase">Recouvrement Réel</p>
-                    <h3 class="stat-value text-2xl text-emerald-400 font-black">
+                    <h3 class="stat-value text-xl text-emerald-400 font-black">
                         {{ number_format($stats['total_valide'], 2) }} FC</h3>
                 </div>
                 <div class="cyber-panel p-4 rounded-2xl border-l-4 border-red-500">

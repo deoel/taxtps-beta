@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
+    // Route::view('dashboard', 'dashboard')->name('dashboard');
+    // Route::view('dashboard', 'dashboard')->name('dashboard');
 
     Route::view('war-room', 'pages.war-room')->name('war-room');
 });
@@ -22,5 +23,6 @@ Route::get('/war-room-unified', [WarRoomUnifiedController::class, 'index'])->nam
 Route::get('/war-room-hub', [WarRoomAdvancedController::class, 'index'])->name('war-room.hub');
 Route::get('/war-room-int', [WarRoomIntelligenceController::class, 'index'])->name('war-room.intelligence');
 Route::get('/war-room-ultimate', [WarRoomUltimateController::class, 'index'])->name('war-room.ultimate');
+Route::redirect('/dashboard', '/war-room-ultimate');
 
 require __DIR__.'/settings.php';
