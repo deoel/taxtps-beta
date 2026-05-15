@@ -86,7 +86,10 @@ class WarRoomUltimateController extends Controller
             ->latest('updated_at')
             ->take(15)->get();
 
-        // --- 6. PERFORMANCE PAR PROVINCE (Pour l'onglet Analyse Provinciale) ---
+        // --- 6. HEURE DE LA DERNIÈRE SYNCHRONISATION ---
+        $lastSyncTime = Declaration::latest('updated_at')->first()?->updated_at ?? now();
+
+        // --- 7. PERFORMANCE PAR PROVINCE (Pour l'onglet Analyse Provinciale) ---
         $provincePerformance = Province::with(['offices.declarations'])
             ->get()
             ->map(fn($province) => [
@@ -103,7 +106,8 @@ class WarRoomUltimateController extends Controller
             'agentPerformance',
             'highRiskFiles',
             'latestAudits',
-            'provincePerformance'
+            'provincePerformance',
+            'lastSyncTime'
         ))->with([
             'provinces' => Province::all(),
             'allOffices' => CustomsOffice::all()

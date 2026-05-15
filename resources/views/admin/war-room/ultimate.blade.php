@@ -78,7 +78,10 @@
         </div>
         <div class="flex items-center gap-6">
             <div class="flex items-center gap-4 bg-white/5 px-3 py-1.5 rounded-full border border-white/5">
-                <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Synchro</span>
+                <div class="text-left">
+                    <span class="text-[9px] font-mono text-gray-500 uppercase tracking-widest block">Synchro</span>
+                    <span class="text-[8px] font-mono text-gray-600">{{ $lastSyncTime->format('H:i:s') }}</span>
+                </div>
                 <button @click="refreshing = true; setTimeout(() => { window.location.reload() }, 1000)"
                     class="text-blue-400 hover:text-blue-300 transition-all" :class="refreshing ? 'refresh-spin' : ''">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,12 +105,20 @@
     </nav>
 
     <div class="flex h-[calc(100vh-64px)] overflow-hidden">
-        <aside class="w-80 cyber-panel border-r border-white/5 p-6 overflow-y-auto" x-show="filtersOpen">
+        <aside class="w-80 cyber-panel border-r border-white/5 p-6 overflow-y-auto custom-scrollbar"
+            x-show="filtersOpen">
             <h2 class="text-blue-400 font-black uppercase tracking-tighter mb-6 flex items-center gap-2">
                 <span class="w-2 h-2 bg-blue-500 rounded-full animate-ping"></span> Paramètres de l'Unité
             </h2>
 
             <form action="{{ route('war-room.ultimate') }}" method="GET" class="space-y-6">
+                <div>
+                    <label class="block text-[10px] text-gray-500 font-bold uppercase mb-2">Plage de Dates</label>
+                    <input type="text" name="date_range" placeholder="AAAA-MM-JJ - AAAA-MM-JJ"
+                        value="{{ request('date_range') }}"
+                        class="w-full bg-slate-900 border border-white/10 rounded-lg p-2 text-sm focus:border-blue-500 outline-none">
+                </div>
+
                 <div>
                     <label class="block text-[10px] text-gray-500 font-bold uppercase mb-2">Secteur Provincial</label>
                     <select name="province_id"
