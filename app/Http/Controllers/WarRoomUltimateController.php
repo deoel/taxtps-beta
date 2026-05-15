@@ -92,15 +92,39 @@ class WarRoomUltimateController extends Controller
         // --- 6. HEURE DE LA DERNIÈRE SYNCHRONISATION ---
         $lastSyncTime = Declaration::latest('updated_at')->first()?->updated_at ?? now();
 
-        // --- 7. PERFORMANCE PAR PROVINCE (Pour l'onglet Analyse Provinciale) ---
-        $provincePerformance = Province::with(['offices.declarations'])
-            ->get()
-            ->map(fn($province) => [
-                'name' => $province->name,
-                'total' => $province->offices->flatMap->declarations->sum('taxe_due'),
-                'count' => $province->offices->flatMap->declarations->count(),
-                'valide' => $province->offices->flatMap->declarations->where('statut', 'valide')->count(),
-            ]);
+        // --- 7. PERFORMANCE PAR PROVINCE (Filtrée) ---
+        $provincePerformance = Province::all()->map(function ($province) use ($request) {
+            // On repart d'une nouvelle requête de déclarations pour cette province
+            $pQuery = Declaration::whereHas('office', function ($q) use ($province) {
+                $q->where('province_id', $province->id);
+            });
+
+            // On applique EXACTEMENT les mêmes filtres que la query principale
+            if ($request->filled('date_from') && $request->filled('date_to')) {
+                $pQuery->whereBetween('created_at', [Carbon::parse($request->date_from), Carbon::parse($request->date_to)->addDay()]);
+            } elseif ($request->filled('date_from')) {
+                $pQuery->whereDate('created_at', '>=', Carbon::parse($request->date_from));
+            } elseif ($request->filled('date_to')) {
+                $pQuery->whereDate('created_at', '<=', Carbon::parse($request->date_to));
+            }
+
+            if ($request->filled('status')) {
+                $pQuery->where('statut', $request->status);
+            }
+
+            // Si un bureau spécifique est filtré, et qu'il n'est pas dans cette province, 
+            // le total sera naturellement à 0 grâce à la condition ci-dessous
+            if ($request->filled('office_id')) {
+                $pQuery->where('customs_office_id', $request->office_id);
+            }
+
+            return [
+                'name'   => $province->name,
+                'total'  => (clone $pQuery)->sum('taxe_due'),
+                'count'  => (clone $pQuery)->count(),
+                'valide' => (clone $pQuery)->where('statut', 'valide')->count(),
+            ];
+        });
 
         return view('admin.war-room.ultimate', compact(
             'stats',
