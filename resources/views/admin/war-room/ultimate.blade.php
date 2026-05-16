@@ -369,7 +369,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const map = L.map('map', {
                 zoomControl: false
-            }).setView([-11.66, 27.47], 6);
+            }).setView([-4.03, 21.75], 5);
 
             L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
@@ -390,7 +390,7 @@
                         <div class="bg-slate-900 text-white p-3 rounded-lg min-w-[160px]">
                             <h4 class="text-xs font-black uppercase">${office.name}</h4>
                             <div class="h-px bg-white/10 my-2"></div>
-                            <p class="text-[10px]">Collecte: <b class="text-emerald-400">${new Intl.NumberFormat().format(office.total_collecte)} $</b></p>
+                            <p class="text-[10px]">Collecte: <b class="text-emerald-400">${new Intl.NumberFormat().format(office.total_collecte)} FC</b></p>
                             <p class="text-[10px]">Alertes: <b class="text-red-500">${office.alertes}</b></p>
                         </div>
                     `);

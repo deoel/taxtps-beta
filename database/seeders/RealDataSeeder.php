@@ -17,12 +17,17 @@ class RealDataSeeder extends Seeder
             Province::firstOrCreate(['name' => $name]);
         }
 
+        // Récupération des IDs des provinces pour l'association
         $hkId = Province::where('name', 'Haut-Katanga')->first()->id;
         $kcId = Province::where('name', 'Kongo-Central')->first()->id;
+        $luaId = Province::where('name', 'Lualaba')->first()->id;
+        $kinId = Province::where('name', 'Kinshasa')->first()->id;
+        $nkId = Province::where('name', 'Nord-Kivu')->first()->id;
+        $ituId = Province::where('name', 'Ituri')->first()->id;
 
-        // 2. Bureaux de Douane (Extraits de "Bureaux de douane.pdf")
-        // Les coordonnées sont simulées sur base des localisations standards de ces bureaux
+        // 2. Bureaux de Douane (Inspirés de la nomenclature DGDA et géolocalisés)
         $bureaux = [
+            // --- HAUT-KATANGA ---
             ['province_id' => $hkId, 'code_bureau' => '701B', 'name' => 'NIK INTERNATIONAL / SOCODAM / EP VILLE', 'latitude' => -11.670, 'longitude' => 27.475],
             ['province_id' => $hkId, 'code_bureau' => '702B', 'name' => 'DHL / AERO LUANO', 'latitude' => -11.591, 'longitude' => 27.530],
             ['province_id' => $hkId, 'code_bureau' => '705B', 'name' => 'KASUMBALESA DOUANE', 'latitude' => -12.253, 'longitude' => 27.801],
@@ -31,11 +36,40 @@ class RealDataSeeder extends Seeder
             ['province_id' => $hkId, 'code_bureau' => '729B', 'name' => 'CARGO CONGO', 'latitude' => -11.685, 'longitude' => 27.490],
             ['province_id' => $hkId, 'code_bureau' => '735B', 'name' => 'AMICONGO', 'latitude' => -11.690, 'longitude' => 27.495],
             ['province_id' => $hkId, 'code_bureau' => '717B', 'name' => 'PETROLE (MOGAS / INTERPETROL / SEP CONGO)', 'latitude' => -11.700, 'longitude' => 27.500],
+
+            // --- KONGO-CENTRAL (Portes d'entrée maritimes) ---
             ['province_id' => $kcId, 'code_bureau' => '201B', 'name' => 'MATADI PORT', 'latitude' => -5.826, 'longitude' => 13.450],
+            ['province_id' => $kcId, 'code_bureau' => '203B', 'name' => 'BOMA PORT', 'latitude' => -5.854, 'longitude' => 13.052],
+            ['province_id' => $kcId, 'code_bureau' => '204B', 'name' => 'LUKALA DOUANE', 'latitude' => -5.412, 'longitude' => 14.498],
+            ['province_id' => $kcId, 'code_bureau' => '206B', 'name' => 'MUANDA FRONTIERE / COCOTIERS', 'latitude' => -5.925, 'longitude' => 12.378],
+
+            // --- LUALABA (Exploitation minière) ---
+            ['province_id' => $luaId, 'code_bureau' => '751B', 'name' => 'KOLWEZI GARE / VILLE', 'latitude' => -10.722, 'longitude' => 25.474],
+            ['province_id' => $luaId, 'code_bureau' => '753B', 'name' => 'KOLWEZI AEROPROT KAZENZE', 'latitude' => -10.762, 'longitude' => 25.385],
+            ['province_id' => $luaId, 'code_bureau' => '755B', 'name' => 'DILOLO FRONTIERE', 'latitude' => -10.702, 'longitude' => 22.345],
+
+            // --- KINSHASA (Hub aéroportuaire et colis) ---
+            ['province_id' => $kinId, 'code_bureau' => '101B', 'name' => 'NDJILI AEROPORT / CARGO', 'latitude' => -4.385, 'longitude' => 15.444],
+            ['province_id' => $kinId, 'code_bureau' => '102B', 'name' => 'KINSHASA BEACH / PORT INFB', 'latitude' => -4.303, 'longitude' => 15.313],
+            ['province_id' => $kinId, 'code_bureau' => '104B', 'name' => 'ENTREPOT CENTRAL DGDA / GOMBE', 'latitude' => -4.311, 'longitude' => 15.295],
+
+            // --- NORD-KIVU (Commerce transfrontalier Est) ---
+            ['province_id' => $nkId, 'code_bureau' => '501B', 'name' => 'GOMA PORT / LAC', 'latitude' => -1.696, 'longitude' => 29.239],
+            ['province_id' => $nkId, 'code_bureau' => '502B', 'name' => 'GRANDE BARRIERE GOMA', 'latitude' => -1.692, 'longitude' => 29.247],
+            ['province_id' => $nkId, 'code_bureau' => '503B', 'name' => 'PETITE BARRIERE GOMA', 'latitude' => -1.684, 'longitude' => 29.243],
+            ['province_id' => $nkId, 'code_bureau' => '506B', 'name' => 'KASINDI FRONTIERE', 'latitude' => 0.033, 'longitude' => 29.721],
+
+            // --- ITURI (Frontière Ouganda) ---
+            ['province_id' => $ituId, 'code_bureau' => '551B', 'name' => 'BUNIA AERODROME', 'latitude' => 1.564, 'longitude' => 30.221],
+            ['province_id' => $ituId, 'code_bureau' => '553B', 'name' => 'MAHAGI FRONTIERE', 'latitude' => 2.302, 'longitude' => 30.988],
+            ['province_id' => $ituId, 'code_bureau' => '554B', 'name' => 'KASENYI PORT LAC ALBERT', 'latitude' => 1.402, 'longitude' => 30.435],
         ];
 
         foreach ($bureaux as $b) {
-            CustomsOffice::updateOrCreate(['code_bureau' => $b['code_bureau']], $b + ['gps_required' => true]);
+            CustomsOffice::updateOrCreate(
+                ['code_bureau' => $b['code_bureau']],
+                $b + ['gps_required' => true]
+            );
         }
 
         // 3. Exonérations (Extraites de "ARRETE_INTERMINISTERIEL...0001.pdf")
