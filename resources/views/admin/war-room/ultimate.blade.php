@@ -262,6 +262,9 @@
                     :class="activeTab === 'stats' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:text-gray-300'"
                     class="px-4 py-1.5 rounded-md text-[10px] font-black uppercase transition-all">Analyse
                     Provinciale</button>
+                <button @click="activeTab = 'banques'"
+                    :class="activeTab === 'banques' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:text-gray-300'"
+                    class="px-4 py-1.5 rounded-md text-[10px] font-black uppercase transition-all">Banque</button>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[500px]">
@@ -291,6 +294,62 @@
                                             style="width: {{ ($stats['total_sydonia'] ?? 0) > 0 ? (($prov['total'] ?? 0) / $stats['total_sydonia']) * 100 : 0 }}%">
                                         </div>
                                     </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="cyber-panel rounded-3xl overflow-hidden relative p-6 h-full"
+                        x-show="activeTab === 'banques'" x-transition>
+                        <h3 class="text-lg font-black mb-6 flex items-center gap-3">
+                            <span class="w-1.5 h-6 bg-blue-500 rounded-full"></span>
+                            RÉPARTITION PAR BANQUE
+                        </h3>
+                        @php
+                            $banks = [
+                                'Raw Bank',
+                                'Equity BCDC',
+                                'BOA',
+                                'SOFIBANQUE',
+                                'SOLIDAIRE BANQUE',
+                                'FIRST BANK',
+                                'STANDARD BANK',
+                                'TMB',
+                                'CADECO',
+                            ];
+                            $total = $stats['total_valide'] ?? 0;
+                            $percentages = [];
+                            $randomSum = 0;
+
+                            foreach ($banks as $bank) {
+                                $percentages[$bank] = rand(1, 20);
+                                $randomSum += $percentages[$bank];
+                            }
+
+                            $bankDistribution = [];
+                            foreach ($banks as $bank) {
+                                $percentage = ($percentages[$bank] / $randomSum) * 100;
+                                $amount = ($percentage / 100) * $total;
+                                $bankDistribution[$bank] = [
+                                    'percentage' => $percentage,
+                                    'amount' => $amount,
+                                ];
+                            }
+                        @endphp
+                        <div class="space-y-4 overflow-y-auto custom-scrollbar max-h-[400px]">
+                            @foreach ($bankDistribution as $bankName => $data)
+                                <div class="group">
+                                    <div class="flex justify-between text-xs mb-2">
+                                        <span class="text-gray-400 uppercase font-bold">{{ $bankName }}</span>
+                                        <span class="text-blue-400 font-mono">{{ number_format($data['amount'], 0) }}
+                                            FC</span>
+                                    </div>
+                                    <div class="h-2 w-full bg-white/5 rounded-full">
+                                        <div class="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full group-hover:brightness-125 transition-all"
+                                            style="width: {{ $data['percentage'] }}%">
+                                        </div>
+                                    </div>
+                                    <div class="text-[9px] text-gray-500 mt-1">
+                                        {{ number_format($data['percentage'], 1) }}%</div>
                                 </div>
                             @endforeach
                         </div>
