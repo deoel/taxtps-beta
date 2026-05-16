@@ -32,19 +32,19 @@ class DeclarationSeeder extends Seeder
             for ($i = 0; $i < $recordsPerBatch; $i++) {
                 $office = $offices->random();
 
-                /** 
-                 * MONTANTS EN CDF (Franc Congolais)
+                /** * MONTANTS EN CDF (Franc Congolais)
                  * Petit colis : 500 000 CDF
                  * Gros conteneur : 1 500 000 000 CDF (1.5 Milliard)
                  */
-                $cif = $faker->randomFloat(2, 5000, 1500000);
+                $cif = $faker->randomFloat(2, 500000, 1500000000);
 
                 $isExempt = $faker->boolean(15);
                 $sh = $isExempt && !empty($exemptCodes)
                     ? $faker->randomElement($exemptCodes)
                     : $faker->numerify('####.##.##');
 
-                $statut = $faker->randomElement($statuts);
+                // MODIFICATION : 70% de chance d'être 'conforme' pour avoir des points verts sur la carte
+                $statut = $faker->boolean(70) ? 'conforme' : $faker->randomElement($statuts);
 
                 // Score de priorité ajusté aux montants CDF
                 $priority = 0;
