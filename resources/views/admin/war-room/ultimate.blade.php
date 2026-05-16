@@ -178,7 +178,7 @@
 
                 <button type="submit"
                     class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-3 rounded-xl transition shadow-lg shadow-blue-900/20 uppercase text-xs tracking-widest">
-                    Mettre à jour la vue
+                    Appliquer les filtres
                 </button>
             </form>
 
