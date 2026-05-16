@@ -167,8 +167,11 @@
                     <label class="block text-[10px] text-gray-500 font-bold uppercase mb-2">État de Vigilance</label>
                     <select name="status" class="w-full bg-slate-900 border border-white/10 rounded-lg p-2 text-sm">
                         <option value="">Tous les statuts</option>
-                        <option value="valide">Validé (Payé)</option>
-                        <option value="alerte">Alerte de Fraude</option>
+                        <option value="valide">Crédit d'enlèvement</option>
+                        <option value="en_attente">Non liquidé</option>
+                        <option value="conforme">Exonéré</option>
+                        <option value="litige">Contentieux</option>
+                        <option value="alerte">Alerte</option>
                         <option value="suspect">Suspect</option>
                     </select>
                 </div>
