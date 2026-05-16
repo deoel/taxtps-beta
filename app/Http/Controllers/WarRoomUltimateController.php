@@ -48,20 +48,43 @@ class WarRoomUltimateController extends Controller
         $stats['ecart'] = $stats['total_sydonia'] - $stats['total_valide'];
         $stats['performance'] = $stats['total_sydonia'] > 0 ? ($stats['total_valide'] / $stats['total_sydonia']) * 100 : 0;
 
-        // --- 3. ANALYSE GÉOGRAPHIQUE (Hérité de Advanced) ---
-        $offices = CustomsOffice::withCount(['declarations as alertes' => function ($q) {
+        // --- 3. ANALYSE GÉOGRAPHIQUE FILTRÉE & OPTIMISÉE ---
+        $officesQuery = CustomsOffice::query();
+
+        // Application du filtre par province sur les bureaux de la carte
+        if ($request->filled('province_id')) {
+            $officesQuery->where('province_id', $request->province_id);
+        }
+
+        // Application du filtre par bureau spécifique sur les bureaux de la carte
+        if ($request->filled('office_id')) {
+            $officesQuery->where('id', $request->office_id);
+        }
+
+        $offices = $officesQuery->withCount(['declarations as alertes' => function ($q) use ($request) {
             $q->whereIn('statut', ['alerte', 'suspect']);
-        }])->get()->map(function ($office) {
-            return [
-                'id' => $office->id,
-                'name' => $office->name,
-                'code_bureau' => $office->code_bureau,
-                'latitude' => $office->latitude,
-                'longitude' => $office->longitude,
-                'alertes' => $office->alertes,
-                'total_collecte' => Declaration::where('customs_office_id', $office->id)->where('statut', 'valide')->sum('taxe_due')
-            ];
-        });
+            // Prise en compte des filtres de date pour le décompte des alertes sur la carte
+            if ($request->filled('date_from')) $q->whereDate('created_at', '>=', Carbon::parse($request->date_from));
+            if ($request->filled('date_to')) $q->whereDate('created_at', '<=', Carbon::parse($request->date_to));
+        }])
+            ->withSum(['declarations as total_collecte' => function ($q) use ($request) {
+                $q->where('statut', 'valide');
+                // Prise en compte des filtres de date pour la collecte sur la carte
+                if ($request->filled('date_from')) $q->whereDate('created_at', '>=', Carbon::parse($request->date_from));
+                if ($request->filled('date_to')) $q->whereDate('created_at', '<=', Carbon::parse($request->date_to));
+            }], 'taxe_due')
+            ->get()
+            ->map(function ($office) {
+                return [
+                    'id' => $office->id,
+                    'name' => $office->name,
+                    'code_bureau' => $office->code_bureau,
+                    'latitude' => $office->latitude,
+                    'longitude' => $office->longitude,
+                    'alertes' => $office->alertes ?? 0,
+                    'total_collecte' => $office->total_collecte ?? 0 // Utilise la somme pré-calculée (Gain de performance SQL)
+                ];
+            });
 
         // --- 4. ANALYSE PAR IMPORTATEUR & PERFORMANCE AGENTS ---
         $topImportateurs = (clone $query)

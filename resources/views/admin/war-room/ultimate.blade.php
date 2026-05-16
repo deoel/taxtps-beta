@@ -243,7 +243,7 @@
                         {{ number_format($stats['total_valide'], 2) }} FC</h3>
                 </div>
                 <div class="cyber-panel p-4 rounded-2xl border-l-4 border-red-500">
-                    <p class="text-[10px] text-gray-400 font-bold uppercase">Alertes Fraude</p>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase">Alertes Risques</p>
                     <h3 class="stat-value text-2xl text-red-500 font-black">{{ $stats['dossiers_suspects'] }}</h3>
                 </div>
                 <div class="cyber-panel p-4 rounded-2xl border-l-4 border-amber-500">
@@ -317,22 +317,35 @@
                                 'CADECO',
                             ];
                             $total = $stats['total_valide'] ?? 0;
-                            $percentages = [];
-                            $randomSum = 0;
-
-                            foreach ($banks as $bank) {
-                                $percentages[$bank] = rand(1, 20);
-                                $randomSum += $percentages[$bank];
-                            }
-
                             $bankDistribution = [];
-                            foreach ($banks as $bank) {
-                                $percentage = ($percentages[$bank] / $randomSum) * 100;
-                                $amount = ($percentage / 100) * $total;
-                                $bankDistribution[$bank] = [
-                                    'percentage' => $percentage,
-                                    'amount' => $amount,
-                                ];
+
+                            // CAS 1 : S'il n'y a aucune collecte réelle, tout le monde reste à 0
+                            if ($total <= 0) {
+                                foreach ($banks as $bank) {
+                                    $bankDistribution[$bank] = [
+                                        'percentage' => 0,
+                                        'amount' => 0,
+                                    ];
+                                }
+                            } else {
+                                // CAS 2 : Il y a de l'argent récolté, on génère la distribution factice
+                                $percentages = [];
+                                $randomSum = 0;
+
+                                foreach ($banks as $bank) {
+                                    $percentages[$bank] = rand(1, 20);
+                                    $randomSum += $percentages[$bank];
+                                }
+
+                                foreach ($banks as $bank) {
+                                    $percentage = ($percentages[$bank] / $randomSum) * 100;
+                                    $amount = ($percentage / 100) * $total;
+                                    
+                                    $bankDistribution[$bank] = [
+                                        'percentage' => $percentage,
+                                        'amount' => $amount,
+                                    ];
+                                }
                             }
                         @endphp
                         <div class="space-y-4 overflow-y-auto custom-scrollbar max-h-[400px]">
